@@ -1,0 +1,10 @@
+{
+  "extends": "rackt",
+  "rules": {
+    "valid-jsdoc": 2,
+    // Disable until Flow supports let and const
+    "no-var": 0,
+  },
+  "plugins": [
+  ]
+}
