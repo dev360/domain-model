@@ -4,7 +4,7 @@ import * as fields from '../../../src/models/fields'
 
 describe('Fields', () => {
   describe('ForeignKey', () => {
-    class Company extends Model {
+    class Company extends Model.create() {
 
       static get Meta() {
         return {
@@ -14,7 +14,7 @@ describe('Fields', () => {
       }
     }
 
-    class Employee extends Model {
+    class Employee extends Model.create() {
       static get company() {
         return new fields.ForeignKey({ model: Company, relatedName: 'employees' })
       }

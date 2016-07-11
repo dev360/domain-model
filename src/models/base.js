@@ -60,7 +60,7 @@ class Manager {
 }
 
 
-class Model {
+class BaseModel {
 
   constructor(props) {
     if (props) {
@@ -98,7 +98,19 @@ class Model {
   }
 }
 
+class Model {
+  constructor() {
+    throw new Error('Use `extends Model.create()`')
+  }
+
+  static create() {
+    return BaseModel
+  }
+}
+
+
 module.exports = {
+  BaseModel,
   Manager,
   Model,
 }

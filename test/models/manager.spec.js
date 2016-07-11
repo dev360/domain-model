@@ -3,12 +3,12 @@ import { Manager, Model } from '../../src/models'
 
 
 describe('Manager', () => {
-  class Person extends Model {
+  class Person extends Model.create() {
     get hasEmail() {
       return (this.email !== undefined)
     }
 
-    static get  Meta() {
+    static get Meta() {
       return {
         detail_url: '/api/contacts/{id}/',
         list_url: '/api/contacts/',
