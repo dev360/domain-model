@@ -4,10 +4,7 @@ import { Url } from '../../src/models'
 
 describe('Url', () => {
   describe('build', () => {
-    //it('should  blah', () => {})
-
     describe('returns correct url', () => {
-    
       it('with one param', () => {
         const url = '/company/{id}'
         const params = { id: 1 }
@@ -25,10 +22,7 @@ describe('Url', () => {
         const params = { }
         expect(Url.build(url, params)).toBe('/company//contacts/')
       })
-    
     })
-
   })
-
 })
 

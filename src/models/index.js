@@ -6,5 +6,5 @@ module.exports = {
   Http,
   Manager,
   Model,
-  Url
+  Url,
 }

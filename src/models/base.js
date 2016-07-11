@@ -1,67 +1,61 @@
 import { http, Url } from './http'
+import { ModelSerializer } from './serialization'
 
 class Manager {
 
-  constructor(props={}) {
-    if(props.model===undefined) {
+  constructor(props = {}) {
+    if (props.model === undefined) {
       throw new Error('Model required')
     }
-    this.model = props.model
+    this.Model = props.model
     this.http = http
   }
 
   get modelName() {
-    const m = new this.model()
+    const m = new this.Model()
     return m.constructor.name
   }
 
-  get(params={}) {
-    let manager = this
-    let Model = this.model
-    return new Promise((resolve, reject) => {
-
+  get(params = {}) {
+    const manager = this
+    const Model = this.Model
+    const handler = (resolve, reject) => {
       // Have better url formatting in the future
-      if(!params.id) {
-        reject({ message: 'invalid request, no id' }) 
+      if (!params.id) {
+        reject({ message: 'invalid request, no id' })
         return
       }
 
-      let base_url = Model.Meta.detail_url
-      let url = Url.build(base_url, params)
-      let request = manager.http.get(url)
+      const baseUrl = Model.Meta.detail_url
+      const url = Url.build(baseUrl, params)
+      const request = manager.http.get(url)
       request
         .then((data) => {
-          let item = new Model(data)
+          const item = ModelSerializer.deserialize(Model, data)
           resolve(item)
         })
-        .catch((request) => {
-          reject(request)
+        .catch((r) => {
+          reject(r)
         })
-    })
+    }
+    return new Promise(handler)
   }
 
   all() {
-    let Model = this.model
+    const Model = this.Model
     return new Promise((resolve, reject) => {
-      let url = Model.meta.url
-      let request = this.http.get(url)
-      request
-        .then((data) => {
-          let items = data.map( item => {
-            return new Model(item)
-          })
-          resolve(items)
-        })
-        .catch((request) => {
-          reject(request)
-        })
+      const url = Model.meta.url
+      const request = this.http.get(url)
+      request.then((data) => {
+        const items = data.map(item => ModelSerializer.deserialize(Model, item))
+        resolve(items)
+      }).catch((r) => {
+        reject(r)
+      })
     })
-
-
   }
 
   filter() {
-     
   }
 }
 
@@ -69,25 +63,27 @@ class Manager {
 class Model {
 
   constructor(props) {
-    for (let key in props) {
-      this[key] = props[key]
+    if (props) {
+      Object.keys(props).forEach((key) => {
+        this[key] = props[key]
+      })
     }
   }
 
   get pk() {
-    return (this.id!==undefined) ? this.id : null
+    return (this.id !== undefined) ? this.id : null
   }
 
   static get objects() {
-    if(!this._objects) {
-      this._objects = new Manager({ model: this })
+    if (!this.objectsCache) {
+      this.objectsCache = new Manager({ model: this })
     }
-    return this._objects
+    return this.objectsCache
   }
 
   static get actions() {
-    let keys = this.meta.actions || []
-    let actions = {}
+    const keys = this.meta.actions || []
+    const actions = {}
     keys.forEach(key => {
       actions[key] = `${this.modelName}_${key}`
     })
@@ -99,12 +95,11 @@ class Model {
   }
 
   del() {
-     
   }
 }
 
 module.exports = {
   Manager,
-  Model
+  Model,
 }
 

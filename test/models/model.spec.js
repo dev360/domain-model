@@ -3,19 +3,17 @@ import { Model } from '../../src/models'
 
 
 describe('Model', () => {
-
   const params = {
     id: 1,
-    name: "Olivia"
+    name: 'Olivia',
   }
   class Person extends Model {
-     
-     static get Meta() {
-       return {
-         detail_url: '/api/contacts/{id}/',
-         list_url: '/api/contacts/'
-       }
-     }
+    static get Meta() {
+      return {
+        detail_url: '/api/contacts/{id}/',
+        list_url: '/api/contacts/',
+      }
+    }
   }
   const model = new Person(params)
   const emptyModel = new Person()
@@ -23,14 +21,14 @@ describe('Model', () => {
   describe('constructor', () => {
     it('maps params to instance attributes', () => {
       expect(model.id).toBe(1)
-      expect(model.name).toBe("Olivia")
+      expect(model.name).toBe('Olivia')
     })
   })
 
   describe('(instance).pk', () => {
     it('returns the id', () => {
       expect(model.pk).toBe(1)
-    }) 
+    })
     it('returns null if no id defined', () => {
       expect(emptyModel.pk).toBe(null)
     })
@@ -43,7 +41,7 @@ describe('Model', () => {
   describe('(static).objects', () => {
     it('calls Manager with model', () => {
       const manager = Person.objects
-      expect(manager.model).toBe(Person)
+      expect(manager.Model).toBe(Person)
     })
     it('returns the same manager class every time', () => {
       const call1 = Person.objects
