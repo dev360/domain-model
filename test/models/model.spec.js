@@ -7,7 +7,7 @@ describe('Model', () => {
     id: 1,
     name: 'Olivia',
   }
-  class Person extends Model.create() {
+  class Person extends Model.extend() {
     static get Meta() {
       return {
         detail_url: '/api/contacts/{id}/',
@@ -22,13 +22,10 @@ describe('Model', () => {
     it('it throws exception', () => {
       expect(() => {
         class Foo extends Model {
-          constructor(props) {
-            super(props)
-          }
         }
         // eslint-disable-next-line no-unused-vars
         const foo = new Foo()
-      }).toThrow(/extends Model.create/)
+      }).toThrow(/Foo extends Model.extend()/)
     })
   })
 
@@ -47,7 +44,7 @@ describe('Model', () => {
       expect(emptyModel.pk).toBe(null)
     })
     it('returns 0 if id is 0', () => {
-      class AnotherModel extends Model.create() {
+      class AnotherModel extends Model.extend() {
       }
       const anotherModel = new AnotherModel({ id: 0 })
       expect(anotherModel.pk).toBe(0)

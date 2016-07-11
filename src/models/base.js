@@ -100,10 +100,10 @@ class BaseModel {
 
 class Model {
   constructor() {
-    throw new Error('Use `extends Model.create()`')
+    throw new Error(`Use '${this.constructor.name} extends Model.extend()'`)
   }
 
-  static create() {
+  static extend() {
     return BaseModel
   }
 }

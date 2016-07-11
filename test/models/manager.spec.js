@@ -3,7 +3,7 @@ import { Manager, Model } from '../../src/models'
 
 
 describe('Manager', () => {
-  class Person extends Model.create() {
+  class Person extends Model.extend() {
     get hasEmail() {
       return (this.email !== undefined)
     }
