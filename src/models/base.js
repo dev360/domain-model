@@ -1,5 +1,6 @@
 import { http, Url } from './http'
 import { ModelSerializer } from './serialization'
+import { REGISTRY } from './decorators'
 
 class Manager {
 
@@ -60,9 +61,12 @@ class Manager {
 }
 
 
-class BaseModel {
+class Model {
 
   constructor(props) {
+    if (!REGISTRY.get(this.constructor.name)) {
+      throw new Error(`Use @register/register(${this.constructor.name}) to register your models`)
+    }
     if (props) {
       Object.keys(props).forEach((key) => {
         this[key] = props[key]
@@ -98,19 +102,7 @@ class BaseModel {
   }
 }
 
-class Model {
-  constructor() {
-    throw new Error(`Use '${this.constructor.name} extends Model.extend()'`)
-  }
-
-  static extend() {
-    return BaseModel
-  }
-}
-
-
 module.exports = {
-  BaseModel,
   Manager,
   Model,
 }

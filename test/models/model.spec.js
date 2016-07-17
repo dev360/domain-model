@@ -1,13 +1,13 @@
 import expect from 'expect'
-import { Model } from '../../src/models'
-
+import { Model, register } from '../../src/models'
 
 describe('Model', () => {
   const params = {
     id: 1,
     name: 'Olivia',
   }
-  class Person extends Model.extend() {
+
+  class Person extends Model {
     static get Meta() {
       return {
         detail_url: '/api/contacts/{id}/',
@@ -15,6 +15,8 @@ describe('Model', () => {
       }
     }
   }
+  register(Person)
+
   const model = new Person(params)
   const emptyModel = new Person()
 
@@ -25,7 +27,7 @@ describe('Model', () => {
         }
         // eslint-disable-next-line no-unused-vars
         const foo = new Foo()
-      }).toThrow(/Foo extends Model.extend()/)
+      }).toThrow(/Use @register\/register\(Foo\) to register your models/)
     })
   })
 
@@ -44,8 +46,9 @@ describe('Model', () => {
       expect(emptyModel.pk).toBe(null)
     })
     it('returns 0 if id is 0', () => {
-      class AnotherModel extends Model.extend() {
+      class AnotherModel extends Model {
       }
+      register(AnotherModel)
       const anotherModel = new AnotherModel({ id: 0 })
       expect(anotherModel.pk).toBe(0)
     })

@@ -1,4 +1,5 @@
-var includes = require('array-includes');
+import includes from 'array-includes'
+
 import * as fields from './fields'
 
 export class ModelSerializer {

@@ -1,9 +1,9 @@
 import expect from 'expect'
-import { Manager, Model } from '../../src/models'
+import { Manager, Model, register } from '../../src/models'
 
 
 describe('Manager', () => {
-  class Person extends Model.extend() {
+  class Person extends Model {
     get hasEmail() {
       return (this.email !== undefined)
     }
@@ -16,6 +16,7 @@ describe('Manager', () => {
     }
 
   }
+  register(Person)
   const manager = new Manager({ model: Person })
 
   describe('constructor', () => {
