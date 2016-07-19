@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { Model, register } from '../../src/models'
+import { Model, register } from 'models'
 
 describe('Model', () => {
   const params = {

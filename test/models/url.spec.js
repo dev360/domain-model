@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { Url } from '../../src/models'
+import { Url } from 'models'
 
 
 describe('Url', () => {

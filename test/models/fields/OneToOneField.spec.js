@@ -4,17 +4,15 @@ import * as fields from 'models/fields'
 
 
 import {
-  Customer,
   Order,
-  OrderItem,
-  Company,
+  Person,
   Employee,
   registerAll,
   unregisterAll,
 } from '../../fixtures/models'
 
 describe('Fields', () => {
-  describe('ForeignKey', () => {
+  describe('OneToOneField', () => {
     before(() => {
       registerAll()
     })
@@ -25,13 +23,13 @@ describe('Fields', () => {
     describe('constructor', () => {
       it('expects model as argument', () => {
         // eslint-disable-next-line no-unused-vars
-        expect(() => { const field = new fields.ForeignKey() }).toThrow(/Model required/)
+        expect(() => { const field = new fields.OneToOneField() }).toThrow(/Model required/)
       })
       it('sets model', () => {
-        expect(OrderItem.order.Model).toBe(Order)
+        expect(Order.cart.Model.name).toBe('Cart')
       })
       it('sets model, even if string', () => {
-        expect(Order.customer.Model).toBe(Customer)
+        expect(Employee.person.Model.name).toBe('Person')
       })
     })
 
@@ -41,45 +39,43 @@ describe('Fields', () => {
         const getCall = expect.spyOn(manager.http, 'get').andReturn(new Promise((resolve) => {
           resolve({
             id: 2,
-            name: 'Christian',
-            company: {
+            jobTitle: 'Software Engineer',
+            person: {
               id: 99,
-              name: 'Acme Inc.',
+              name: 'Christian',
             },
           })
         }))
         const resp = manager.get({ id: 99 })
         return resp.then((employee) => {
           expect(employee.constructor.name).toBe('Employee')
-          expect(employee.name).toBe('Christian')
-          expect(employee.company.constructor.name).toBe('Company')
-          expect(employee.company.id).toBe(99)
-          expect(employee.company.name).toBe('Acme Inc.')
+          expect(employee.jobTitle).toBe('Software Engineer')
+          expect(employee.person.constructor.name).toBe('Person')
+          expect(employee.person.id).toBe(99)
+          expect(employee.person.name).toBe('Christian')
           getCall.restore()
         })
       })
 
       it('resolves relatedName', () => {
-        const manager = Company.objects
+        const manager = Person.objects
         const getCall = expect.spyOn(manager.http, 'get').andReturn(new Promise((resolve) => {
           resolve({
             id: 99,
-            name: 'Acme Inc.',
-            employees: [
-              {
-                id: 2,
-                name: 'Christian',
-              },
-            ],
+            name: 'Christian',
+            employee: {
+              id: 2,
+              jobTitle: 'Software Engineer',
+            },
           })
         }))
         const resp = manager.get({ id: 99 })
         return resp.then((company) => {
-          expect(company.constructor.name).toBe('Company')
-          expect(company.name).toBe('Acme Inc.')
-          expect(company.employees[0].constructor.name).toBe('Employee')
-          expect(company.employees[0].id).toBe(2)
-          expect(company.employees[0].name).toBe('Christian')
+          expect(company.constructor.name).toBe('Person')
+          expect(company.name).toBe('Christian')
+          expect(company.employee.constructor.name).toBe('Employee')
+          expect(company.employee.id).toBe(2)
+          expect(company.employee.jobTitle).toBe('Software Engineer')
           getCall.restore()
         })
       })

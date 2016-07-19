@@ -5,5 +5,8 @@
     "semi": [2, "never"]
   },
   "plugins": [
-  ]
+  ],
+  "settings": {
+    "import/resolver": "webpack"
+  }
 }

@@ -1,7 +1,7 @@
 import { BaseField } from './base'
 import { REGISTRY } from '../decorators'
 
-export class ForeignKey extends BaseField {
+export class OneToOneField extends BaseField {
   constructor(props = {}) {
     super()
 
