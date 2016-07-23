@@ -2,6 +2,10 @@ import { Model, fields } from 'domain-model'
 
 export class User extends Model {
 
+  get displayName() {
+    return `${this.name} [${this.email}]`
+  }
+
   static get address() {
     return new fields.ForeignKey({ model: 'Address' })
   }
