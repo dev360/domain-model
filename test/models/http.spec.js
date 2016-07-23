@@ -171,18 +171,158 @@ describe('Http', () => {
   })
 
   describe('get', () => {
-     
+    it('calls fetch with method=GET', () => {
+      let request = null
+      const url = '/api/1.0/orders/'
+      fetchMock.restore()
+      fetchMock.mock(url, {})
+      const http = new Http()
+      request = http.get(url)
+      return request.then(() => {
+        const opts = fetchMock.lastOptions(url)
+        expect(opts.method).toBe(undefined)
+      })
+    })
   })
 
   describe('post', () => {
+    it('calls fetch with method=POST', () => {
+      let request = null
+      const url = '/api/1.0/orders/'
+      fetchMock.restore()
+      fetchMock.mock(url, {})
+      const http = new Http()
+      request = http.post(url, { test: true })
+      return request.then(() => {
+        const opts = fetchMock.lastOptions(url)
+        expect(opts.method).toBe('POST')
+      })
+    })
+
+    it('calls fetch with payload', () => {
+      let request = null
+      const url = '/api/1.0/orders/'
+      fetchMock.restore()
+      fetchMock.mock(url, {})
+      const http = new Http()
+
+      const payload = { test: true }
+      request = http.post(url, payload)
+      return request.then(() => {
+        const opts = fetchMock.lastOptions(url)
+        expect(opts.body).toBe(JSON.stringify(payload))
+      })
+    })
+
+    it('calls makeRequest', () => {
+      let request = null
+      const url = '/api/1.0/test/'
+      const http = new Http()
+      const payload = { test: true }
+      const response = new Promise((resolve) => { resolve(payload) })
+      const httpRequest = expect.spyOn(http, 'httpRequest').andReturn(response)
+      request = http.post(url, payload)
+      return request.then((data) => {
+        expect(data).toBe(payload)
+        expect(httpRequest).toHaveBeenCalledWith(url, 'POST', payload)
+      }).catch(() => {
+        throw new Error('Should not error out')
+      })
+    })
   })
 
   describe('put', () => {
+    it('calls fetch with method=PUT', () => {
+      let request = null
+      const url = '/api/1.0/orders/'
+      fetchMock.restore()
+      fetchMock.mock(url, {})
+      const http = new Http()
+      request = http.put(url, { test: true })
+      return request.then(() => {
+        const opts = fetchMock.lastOptions(url)
+        expect(opts.method).toBe('PUT')
+      })
+    })
 
+    it('calls fetch with payload', () => {
+      let request = null
+      const url = '/api/1.0/orders/'
+      fetchMock.restore()
+      fetchMock.mock(url, {})
+      const http = new Http()
+
+      const payload = { test: true }
+      request = http.put(url, payload)
+      return request.then(() => {
+        const opts = fetchMock.lastOptions(url)
+        expect(opts.body).toBe(JSON.stringify(payload))
+      })
+    })
+
+    it('calls makeRequest', () => {
+      let request = null
+      const url = '/api/1.0/test/'
+      const http = new Http()
+      const payload = { test: true }
+      const response = new Promise((resolve) => { resolve(payload) })
+      const httpRequest = expect.spyOn(http, 'httpRequest').andReturn(response)
+      request = http.put(url, payload)
+      return request.then((data) => {
+        expect(data).toBe(payload)
+        expect(httpRequest).toHaveBeenCalledWith(url, 'PUT', payload)
+      }).catch(() => {
+        throw new Error('Should not error out')
+      })
+    })
   })
 
   describe('delete', () => {
-  
-  })
+    it('calls fetch with method=DELETE', () => {
+      let request = null
+      const url = '/api/1.0/orders/'
+      fetchMock.restore()
+      fetchMock.mock(url, {})
+      const http = new Http()
+      request = http.delete(url, { test: true })
+      return request.then(() => {
+        const opts = fetchMock.lastOptions(url)
+        expect(opts.method).toBe('DELETE')
+      })
+    })
 
+    it('calls fetch with payload', () => {
+      // NOTE: not sure if this scenario really makes sense.
+      // I see no reason why Http wrapper shouldnt support
+      // a body on a delete call though.
+      let request = null
+      const url = '/api/1.0/orders/'
+      fetchMock.restore()
+      fetchMock.mock(url, {})
+      const http = new Http()
+
+      const payload = { test: true }
+      request = http.delete(url, payload)
+      return request.then(() => {
+        const opts = fetchMock.lastOptions(url)
+        expect(opts.body).toBe(JSON.stringify(payload))
+      })
+    })
+
+    it('calls makeRequest', () => {
+      let request = null
+      const url = '/api/1.0/test/'
+      const http = new Http()
+      const payload = { test: true }
+      const response = new Promise((resolve) => { resolve(payload) })
+      const httpRequest = expect.spyOn(http, 'httpRequest').andReturn(response)
+      request = http.delete(url, payload)
+      return request.then((data) => {
+        expect(data).toBe(payload)
+        expect(httpRequest).toHaveBeenCalledWith(url, 'DELETE', payload)
+      }).catch(() => {
+        throw new Error('Should not error out')
+      })
+    })
+  })
 })
