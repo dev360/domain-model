@@ -5,7 +5,6 @@ import { Http } from 'domain-model/http'
 
 describe('Http', () => {
   describe('(static).configure()', () => {
-  
   })
 
   describe('(instance).httpRequest', () => {
