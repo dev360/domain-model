@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { Model, register } from 'domain-model'
+import { Model } from 'domain-model'
 
 describe('Model', () => {
   const params = {
@@ -15,7 +15,7 @@ describe('Model', () => {
       }
     }
   }
-  register(Person)
+  Person.register()
 
   const model = new Person(params)
   const emptyModel = new Person()
@@ -48,7 +48,7 @@ describe('Model', () => {
     it('returns 0 if id is 0', () => {
       class AnotherModel extends Model {
       }
-      register(AnotherModel)
+      AnotherModel.register()
       const anotherModel = new AnotherModel({ id: 0 })
       expect(anotherModel.pk).toBe(0)
     })

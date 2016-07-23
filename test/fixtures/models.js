@@ -1,4 +1,4 @@
-import { Model, fields, register, unregister } from 'domain-model'
+import { Model, fields } from 'domain-model'
 
 
 export class Cart extends Model {
@@ -94,21 +94,21 @@ export class Employee extends Model {
 
 
 export function registerAll() {
-  register(Order)
-  register(OrderItem)
-  register(Customer)
-  register(Employee)
-  register(Company)
-  register(Cart)
-  register(Person)
+  Order.register()
+  OrderItem.register()
+  Customer.register()
+  Employee.register()
+  Company.register()
+  Cart.register()
+  Person.register()
 }
 
 export function unregisterAll() {
-  unregister(Order)
-  unregister(OrderItem)
-  unregister(Customer)
-  unregister(Employee)
-  unregister(Company)
-  unregister(Cart)
-  unregister(Person)
+  Order.unregister()
+  OrderItem.unregister()
+  Customer.unregister()
+  Employee.unregister()
+  Company.unregister()
+  Cart.unregister()
+  Person.unregister()
 }

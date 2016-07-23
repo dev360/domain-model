@@ -1,6 +1,6 @@
 import { http, Url } from './http'
 import { ModelSerializer } from './serialization'
-import { REGISTRY } from './decorators'
+import { REGISTRY, register, unregister } from './decorators'
 
 class Manager {
 
@@ -85,17 +85,16 @@ class Model {
     return this.objectsCache
   }
 
-  static get actions() {
-    const keys = this.meta.actions || []
-    const actions = {}
-    keys.forEach(key => {
-      actions[key] = `${this.modelName}_${key}`
-    })
-    return actions
-  }
-
   static get _modelName() {
     return this.constructor.name
+  }
+
+  static register() {
+    register(this)
+  }
+
+  static unregister() {
+    unregister(this)
   }
 
   del() {
