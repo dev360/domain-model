@@ -1,7 +1,7 @@
 {
-  "name": "react-django",
+  "name": "domain-model",
   "version": "3.5.2",
-  "description": "Django Models and Forms in React",
+  "description": "ES6 Domain Models for REST apis",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
   "typings": "./index.d.ts",
@@ -23,32 +23,30 @@
     "check:examples": "npm run build:examples && npm run test:examples",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-django.js",
-    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-django.min.js",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/domain-model.js",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/domain-model.min.js",
     "build:examples": "cross-env BABEL_ENV=commonjs babel-node examples/buildAll.js",
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "prepublish": "npm run clean && npm run check:src && npm run build && check-es3-syntax lib/ dist/ --kill"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dev360/react-django.git"
+    "url": "https://github.com/dev360/domain-model.git"
   },
   "keywords": [
     "react",
-    "redux",
+    "domain",
     "models",
-    "rest",
-    "forms",
-    "validation"
+    "rest"
   ],
   "authors": [
     "Christian Toivola <c.toivola@gmail.com> (https://github.com/dev360)"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dev360/react-django/issues"
+    "url": "https://github.com/dev360/domain-model/issues"
   },
-  "homepage": "http://github.com/dev360/react-django",
+  "homepage": "http://github.com/dev360/domain-model",
   "dependencies": {
     "array-includes": "^3.0.2",
     "es6-promise": "^3.2.1",
@@ -108,7 +106,7 @@
     "typescript-definition-tester": "0.0.4",
     "webpack": "^1.9.6"
   },
-  "npmName": "react-django",
+  "npmName": "domain-model",
   "npmFileMap": [
     {
       "basePath": "/dist/",
