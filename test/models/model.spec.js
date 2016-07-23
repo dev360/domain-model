@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { Model, register } from 'models'
+import { Model, register } from 'domain-model'
 
 describe('Model', () => {
   const params = {

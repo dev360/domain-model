@@ -12,7 +12,7 @@ var config = {
     ]
   },
   output: {
-    library: 'React Django',
+    library: 'Domain Model',
     libraryTarget: 'umd'
   },
   plugins: [
@@ -40,12 +40,12 @@ module.exports = config
 
 // When inside of repo, prefer src to compiled version.
 // You can safely delete these lines in your project.
-var modelsSrc = path.join(__dirname, 'src', 'models')
+var modelsSrc = path.join(__dirname, 'src', 'domain-model')
 var modelsNodeModules = path.join(__dirname, 'node_modules')
 var fs = require('fs')
 if (fs.existsSync(modelsSrc) && fs.existsSync(modelsNodeModules)) {
   // Resolve models to source
-  module.exports.resolve = { alias: { 'models': modelsSrc } }
+  module.exports.resolve = { alias: { 'domain-model': modelsSrc } }
   // Compile models from source
   module.exports.module.loaders.push({
     test: /\.js$/,

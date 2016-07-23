@@ -1,6 +1,6 @@
 import expect from 'expect'
 
-import * as fields from 'models/fields'
+import * as fields from 'domain-model/fields'
 
 
 import {

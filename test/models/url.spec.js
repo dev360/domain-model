@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { Url } from 'models'
+import { Url } from 'domain-model'
 
 
 describe('Url', () => {

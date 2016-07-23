@@ -1,6 +1,6 @@
 import expect from 'expect'
 
-import { ModelSerializer } from 'models'
+import { ModelSerializer } from 'domain-model'
 
 import {
   OrderItem,

@@ -1,7 +1,7 @@
 import expect from 'expect'
 import fetchMock from 'fetch-mock'
 
-import { Http } from 'models/http'
+import { Http } from 'domain-model/http'
 
 describe('Http', () => {
   describe('(static).configure()', () => {

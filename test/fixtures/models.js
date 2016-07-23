@@ -1,4 +1,4 @@
-import { Model, fields, register, unregister } from '../../src/models'
+import { Model, fields, register, unregister } from 'domain-model'
 
 
 export class Cart extends Model {

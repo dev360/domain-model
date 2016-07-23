@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { Manager } from 'models'
+import { Manager } from 'domain-model'
 
 import {
   Company,
