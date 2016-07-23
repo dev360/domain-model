@@ -1,29 +1,60 @@
-class Http {
+import 'isomorphic-fetch'
 
-  httpRequest(url, verb = 'GET', payload = null) {
+
+export const HttpConfig = {
+  credentials: 'same-origin',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+}
+
+export class Http {
+  static configure(options, headers) {
+    HttpConfig.options = options
+    HttpConfig.headers = headers
+  }
+
+  httpRequest(url, method = 'GET', payload = null, config = HttpConfig) {
     return new Promise((resolve, reject) => {
-      const request = new XMLHttpRequest()
-      request.open(verb, url, true)
-      request.onload = () => {
-        if (request.status >= 200 && request.status < 400) {
-          // Success!
-          const data = JSON.parse(request.responseText)
-          resolve(data, request)
-        } else {
-          // We reached our target server, but it returned an error
-          reject(request)
-        }
+      const { headers, credentials } = config
+      const options = {
+        credentials,
+        headers,
       }
-      request.onerror = () => {
-        reject(request)
+      if (method !== 'GET') {
+        options.method = method
+      }
+      if (payload) {
+        options.body = JSON.stringify(payload)
       }
 
-      if (payload !== null) {
-        request.setRequestHeader('Content-Type', 'application/json')
-        request.send(payload)
-      } else {
-        request.send()
-      }
+      const request = fetch(url, options).then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          response.json().then((data) => {
+            resolve(data, request)
+          }).catch(() => {
+            const error = {
+              type: 'JSON serialization failed',
+              response,
+            }
+            reject(error)
+          })
+        }
+        if (response.status >= 300) {
+          const error = {
+            type: response.statusText,
+            response,
+          }
+          reject(error)
+        }
+      }).catch((response) => {
+        const error = {
+          type: 'Request failed',
+          response,
+        }
+        reject(error)
+      })
     })
   }
 
@@ -31,16 +62,16 @@ class Http {
     return this.httpRequest(url)
   }
 
-  post(url, data) {
-    return this.httpRequest(url, 'POST', data)
+  post(url, payload) {
+    return this.httpRequest(url, 'POST', payload)
   }
 
-  put(url, data) {
-    return this.httpRequest(url, 'PUT', data)
+  put(url, payload) {
+    return this.httpRequest(url, 'PUT', payload)
   }
 
-  delete(url, data = null) {
-    return this.httpRequest(url, 'DELETE', data)
+  delete(url, payload = null) {
+    return this.httpRequest(url, 'DELETE', payload)
   }
 
 }
@@ -71,4 +102,5 @@ export class Url {
     return newUrl
   }
 }
+
 export const http = new Http()
