@@ -4,7 +4,11 @@ import fetchMock from 'fetch-mock'
 import { Http } from 'models/http'
 
 describe('Http', () => {
-  describe('httpRequest', () => {
+  describe('(static).configure()', () => {
+  
+  })
+
+  describe('(instance).httpRequest', () => {
     let request = null
     const url = '/api/1.0/orders/'
 
@@ -16,7 +20,7 @@ describe('Http', () => {
       return request
     })
 
-    describe('default settings', () => {
+    describe('passes opts', () => {
       it('Credentials are \'same-origin\'', () => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.credentials).toBe('same-origin')
@@ -170,7 +174,7 @@ describe('Http', () => {
     })
   })
 
-  describe('get', () => {
+  describe('(instance).get', () => {
     it('calls fetch with method=GET', () => {
       let request = null
       const url = '/api/1.0/orders/'
@@ -185,7 +189,7 @@ describe('Http', () => {
     })
   })
 
-  describe('post', () => {
+  describe('(instance).post', () => {
     it('calls fetch with method=POST', () => {
       let request = null
       const url = '/api/1.0/orders/'
@@ -231,7 +235,7 @@ describe('Http', () => {
     })
   })
 
-  describe('put', () => {
+  describe('(instance).put', () => {
     it('calls fetch with method=PUT', () => {
       let request = null
       const url = '/api/1.0/orders/'
@@ -277,7 +281,7 @@ describe('Http', () => {
     })
   })
 
-  describe('delete', () => {
+  describe('(instance).delete', () => {
     it('calls fetch with method=DELETE', () => {
       let request = null
       const url = '/api/1.0/orders/'
