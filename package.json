@@ -1,6 +1,6 @@
 {
   "name": "domain-model",
-  "version": "3.5.2",
+  "version": "0.1.0",
   "description": "ES6 Domain Models for REST apis",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
