@@ -43,20 +43,48 @@ class Manager {
   }
 
   all() {
-    const Model = this.Model
     return new Promise((resolve, reject) => {
-      const url = Model.meta.url
-      const request = this.http.get(url)
-      request.then((data) => {
+      const Model = this.Model
+      const url = Model.Meta.list_url
+      this.http.get(url).then((data) => {
         const items = data.map(item => ModelSerializer.deserialize(Model, item))
         resolve(items)
-      }).catch((r) => {
-        reject(r)
-      })
+      }).catch(reject)
     })
   }
 
-  filter() {
+  create(instance) {
+    const baseUrl = this.Model.Meta.list_url
+    const url = Url.build(baseUrl, instance)
+    return new Promise((resolve, reject) => {
+      this.http.post(url, instance).then((data) => {
+        if (data) {
+          resolve(new this.Model(data))
+        } else {
+          reject({ type: 'Unable to read response', instance: data })
+        }
+      }).catch(reject)
+    })
+  }
+
+  update(instance) {
+    const baseUrl = this.Model.Meta.detail_url
+    const url = Url.build(baseUrl, instance)
+    return new Promise((resolve, reject) => {
+      this.http.put(url, instance).then((data) => {
+        if (data) {
+          resolve(new this.Model(data))
+        } else {
+          reject({ type: 'Unable to read response', instance: data })
+        }
+      }).catch(reject)
+    })
+  }
+
+  delete(instance) {
+    const baseUrl = this.Model.Meta.detail_url
+    const url = Url.build(baseUrl, instance)
+    return this.http.delete(url, instance)
   }
 }
 
@@ -97,7 +125,22 @@ class Model {
     unregister(this)
   }
 
-  del() {
+  get _model() {
+    // No idea how else to do this..
+    return REGISTRY.get(this.constructor.name)
+  }
+
+  delete() {
+    const Cls = this._model // eslint-disable-line no-underscore-dangle
+    return Cls.objects.delete(this)
+  }
+
+  save() {
+    const Cls = this._model // eslint-disable-line no-underscore-dangle
+    if (!this.id) {
+      return Cls.objects.create(this)
+    }
+    return Cls.objects.update(this)
   }
 }
 

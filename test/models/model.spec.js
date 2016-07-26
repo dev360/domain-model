@@ -1,6 +1,8 @@
 import expect from 'expect'
 import { Model } from 'domain-model'
 
+import { Order } from '../fixtures/models'
+
 describe('Model', () => {
   const params = {
     id: 1,
@@ -51,6 +53,35 @@ describe('Model', () => {
       AnotherModel.register()
       const anotherModel = new AnotherModel({ id: 0 })
       expect(anotherModel.pk).toBe(0)
+    })
+  })
+
+  describe('(instance).save()', () => {
+    it('calls manager.create() when no id', () => {
+      const spy = expect.spyOn(Order.objects, 'create').andReturn(null)
+      const instance = new Order({ name: 'Christian' })
+      instance.save()
+      expect(spy).toHaveBeenCalledWith(instance)
+      spy.restore()
+    })
+
+    it('calls manager.update() when there is id', () => {
+      const spy = expect.spyOn(Order.objects, 'update').andReturn(null)
+      const instance = new Order({ id: 2, name: 'Christian' })
+      instance.save()
+      expect(spy).toHaveBeenCalledWith(instance)
+      spy.restore()
+    })
+  })
+
+  describe('(instance).delete()', () => {
+    it('calls manager.delete()', () => {
+      const manager = Order.objects
+      const spy = expect.spyOn(manager, 'delete').andReturn(null)
+      const instance = new Order({ id: 2, name: 'Christian' })
+      instance.delete()
+      expect(spy).toHaveBeenCalledWith(instance)
+      spy.restore()
     })
   })
 

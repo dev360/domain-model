@@ -37,7 +37,7 @@ describe('Manager', () => {
 
 
   describe('(instance).get', () => {
-    it('calls http with right params', () => {
+    it('calls http with correct params', () => {
       const mgr = Company.objects
       const getCall = expect.spyOn(mgr.http, 'get').andReturn(new Promise((resolve) => {
         resolve()
@@ -65,4 +65,78 @@ describe('Manager', () => {
       })
     })
   })
+
+  describe('(instance).all', () => {
+    it('calls http with correct params', () => {
+      const mgr = Company.objects
+      const getCall = expect.spyOn(mgr.http, 'get').andReturn(new Promise((resolve) => {
+        resolve()
+      }))
+
+      mgr.all()
+      expect(getCall).toHaveBeenCalledWith('/api/company/')
+      getCall.restore()
+    })
+
+    it('returns a class instance', () => {
+      const data = { id: 99, name: 'Olivia', email: 'olivia@me' }
+      const mgr = Employee.objects
+      const getCall = expect.spyOn(mgr.http, 'get').andReturn(new Promise((resolve) => {
+        resolve([data])
+      }))
+      const response = mgr.all({ id: 99 })
+      return response.then((items) => {
+        expect(items.length).toBe(1)
+        const item = items[0]
+        expect(item.id).toBe(99)
+        expect(item.name).toBe('Olivia')
+        expect(item.hasEmail).toBe(true)
+        expect(item.constructor.name).toBe('Employee')
+        getCall.restore()
+      })
+    })
+  })
+
+  describe('(instance).create()', () => {
+    it('calls http with correct params', () => {
+      const mgr = Company.objects
+      const spy = expect.spyOn(mgr.http, 'post').andReturn(new Promise((resolve) => {
+        resolve()
+      }))
+
+      const payload = { id: 99 }
+      mgr.create(payload)
+      expect(spy).toHaveBeenCalledWith('/api/company/', payload)
+      spy.restore()
+    })
+  })
+
+  describe('(instance).update()', () => {
+    it('calls http with correct params', () => {
+      const mgr = Company.objects
+      const spy = expect.spyOn(mgr.http, 'put').andReturn(new Promise((resolve) => {
+        resolve()
+      }))
+
+      const payload = { id: 99 }
+      mgr.update(payload)
+      expect(spy).toHaveBeenCalledWith('/api/company/99/', payload)
+      spy.restore()
+    })
+  })
+
+  describe('(instance).delete()', () => {
+    it('calls http with correct params', () => {
+      const mgr = Company.objects
+      const spy = expect.spyOn(mgr.http, 'delete').andReturn(new Promise((resolve) => {
+        resolve()
+      }))
+
+      const payload = { id: 99 }
+      mgr.delete(payload)
+      expect(spy).toHaveBeenCalledWith('/api/company/99/', payload)
+      spy.restore()
+    })
+  })
+
 })
