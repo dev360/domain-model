@@ -138,5 +138,4 @@ describe('Manager', () => {
       spy.restore()
     })
   })
-
 })
