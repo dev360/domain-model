@@ -1,6 +1,15 @@
 import { Model, fields } from 'domain-model'
 
 
+export class Account extends Model {
+  static get Meta() {
+    return {
+      detail_url: '/api/accounts/',
+      list_url: '/api/accounts/',
+    }
+  }
+}
+
 export class Cart extends Model {
   static get Meta() {
     return {
@@ -94,6 +103,7 @@ export class Employee extends Model {
 
 
 export function registerAll() {
+  Account.register()
   Order.register()
   OrderItem.register()
   Customer.register()
@@ -104,6 +114,7 @@ export function registerAll() {
 }
 
 export function unregisterAll() {
+  Account.unregister()
   Order.unregister()
   OrderItem.unregister()
   Customer.unregister()

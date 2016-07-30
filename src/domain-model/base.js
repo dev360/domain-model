@@ -22,13 +22,8 @@ class Manager {
     const Model = this.Model
     const handler = (resolve, reject) => {
       // Have better url formatting in the future
-      if (!params.id) {
-        reject({ message: 'invalid request, no id' })
-        return
-      }
-
       const baseUrl = Model.Meta.detail_url
-      const url = Url.build(baseUrl, params)
+      const url = Url.build(baseUrl, params || {})
       const request = manager.http.get(url)
       request
         .then((data) => {

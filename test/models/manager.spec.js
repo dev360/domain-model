@@ -2,6 +2,7 @@ import expect from 'expect'
 import { Manager } from 'domain-model'
 
 import {
+  Account,
   Company,
   Employee,
   registerAll,
@@ -61,6 +62,22 @@ describe('Manager', () => {
         expect(employee.name).toBe('Olivia')
         expect(employee.hasEmail).toBe(true)
         expect(employee.constructor.name).toBe('Employee')
+        getCall.restore()
+      })
+    })
+
+    it('returns when no params passed', () => {
+      const item = { id: 99, name: 'Olivia', email: 'olivia@me' }
+      const mgr = Account.objects
+      const getCall = expect.spyOn(mgr.http, 'get').andReturn(new Promise((resolve) => {
+        resolve(item)
+      }))
+
+      const response = mgr.get()
+      return response.then((employee) => {
+        expect(employee.id).toBe(99)
+        expect(employee.name).toBe('Olivia')
+        expect(employee.constructor.name).toBe('Account')
         getCall.restore()
       })
     })
