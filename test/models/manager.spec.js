@@ -63,6 +63,8 @@ describe('Manager', () => {
         expect(employee.hasEmail).toBe(true)
         expect(employee.constructor.name).toBe('Employee')
         getCall.restore()
+      }).catch((error) => {
+        throw error
       })
     })
 
@@ -79,6 +81,8 @@ describe('Manager', () => {
         expect(employee.name).toBe('Olivia')
         expect(employee.constructor.name).toBe('Account')
         getCall.restore()
+      }).catch((error) => {
+        throw error
       })
     })
   })
@@ -110,6 +114,8 @@ describe('Manager', () => {
         expect(item.hasEmail).toBe(true)
         expect(item.constructor.name).toBe('Employee')
         getCall.restore()
+      }).catch((error) => {
+        throw error
       })
     })
   })
