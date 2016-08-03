@@ -39,14 +39,15 @@ describe('Fields', () => {
       it('casts to correct type', () => {
         const manager = Employee.objects
         const getCall = expect.spyOn(manager.http, 'get').andReturn(new Promise((resolve) => {
-          resolve({
+          const data = {
             id: 2,
             name: 'Christian',
             company: {
               id: 99,
               name: 'Acme Inc.',
             },
-          })
+          }
+          resolve({ data })
         }))
         const resp = manager.get({ id: 99 })
         return resp.then((employee) => {
@@ -62,7 +63,7 @@ describe('Fields', () => {
       it('resolves relatedName', () => {
         const manager = Company.objects
         const getCall = expect.spyOn(manager.http, 'get').andReturn(new Promise((resolve) => {
-          resolve({
+          const data = {
             id: 99,
             name: 'Acme Inc.',
             employees: [
@@ -71,7 +72,8 @@ describe('Fields', () => {
                 name: 'Christian',
               },
             ],
-          })
+          }
+          resolve({ data })
         }))
         const resp = manager.get({ id: 99 })
         return resp.then((company) => {

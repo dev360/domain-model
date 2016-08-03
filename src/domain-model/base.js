@@ -26,7 +26,7 @@ class Manager {
       const url = Url.build(baseUrl, params || {})
       const request = manager.http.get(url)
       request
-        .then((data) => {
+        .then(({ data }) => {
           const item = ModelSerializer.deserialize(Model, data)
           resolve(item)
         })
@@ -41,7 +41,7 @@ class Manager {
     return new Promise((resolve, reject) => {
       const Model = this.Model
       const url = Model.Meta.list_url
-      this.http.get(url).then((data) => {
+      this.http.get(url).then(({ data }) => {
         const items = data.map(item => ModelSerializer.deserialize(Model, item))
         resolve(items)
       }).catch(reject)
@@ -52,7 +52,7 @@ class Manager {
     const baseUrl = this.Model.Meta.list_url
     const url = Url.build(baseUrl, instance)
     return new Promise((resolve, reject) => {
-      this.http.post(url, instance).then((data) => {
+      this.http.post(url, instance).then(({ data }) => {
         if (data) {
           resolve(new this.Model(data))
         } else {

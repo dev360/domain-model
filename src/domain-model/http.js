@@ -29,29 +29,42 @@ export class Http {
         options.body = JSON.stringify(payload)
       }
 
-      const request = fetch(url, options).then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          response.json().then((data) => {
-            resolve(data, request)
-          }).catch(() => {
+      fetch(url, options).then((response) => {
+        const { status } = response
+        response.json().then((data) => {
+          // If serialization succeeds
+          if (status >= 200 && status < 300) {
+            resolve({ data, response })
+          } else {
             const error = {
-              type: 'JSON serialization failed',
+              type: response.statusText,
               response,
             }
             reject(error)
-          })
-        }
-        if (response.status >= 300) {
-          const error = {
-            type: response.statusText,
-            response,
           }
-          reject(error)
-        }
-      }).catch((response) => {
+        }).catch(() => {
+          // If serialization fails
+          if (status >= 200 && status < 300) {
+            // It would seem more normal to receive
+            // empty body on 201/204.. otherwise lets
+            // trigger a warning.
+            if (status !== 201 && status !== 204) {
+              // eslint-disable-next-line no-console
+              console.warn('JSON deserialization failed')
+            }
+            resolve({ response })
+          } else {
+            const error = {
+              type: response.statusText,
+              response,
+            }
+            reject(error)
+          }
+        })
+      }).catch(() => {
+        // If request fails alltogether
         const error = {
           type: 'Request failed',
-          response,
         }
         reject(error)
       })

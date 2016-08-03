@@ -1,4 +1,6 @@
 import expect from 'expect'
+import fetchMock from 'fetch-mock'
+
 import { Manager } from 'domain-model'
 
 import {
@@ -51,18 +53,15 @@ describe('Manager', () => {
 
     it('returns a class instance', () => {
       const item = { id: 99, name: 'Olivia', email: 'olivia@me' }
+      fetchMock.restore()
+      fetchMock.mock('/api/employee/99/', item)
       const mgr = Employee.objects
-      const getCall = expect.spyOn(mgr.http, 'get').andReturn(new Promise((resolve) => {
-        resolve(item)
-      }))
-
       const response = mgr.get({ id: 99 })
       return response.then((employee) => {
         expect(employee.id).toBe(99)
         expect(employee.name).toBe('Olivia')
         expect(employee.hasEmail).toBe(true)
         expect(employee.constructor.name).toBe('Employee')
-        getCall.restore()
       }).catch((error) => {
         throw error
       })
@@ -70,17 +69,13 @@ describe('Manager', () => {
 
     it('returns when no params passed', () => {
       const item = { id: 99, name: 'Olivia', email: 'olivia@me' }
-      const mgr = Account.objects
-      const getCall = expect.spyOn(mgr.http, 'get').andReturn(new Promise((resolve) => {
-        resolve(item)
-      }))
-
-      const response = mgr.get()
+      fetchMock.restore()
+      fetchMock.mock('/api/accounts/', item)
+      const response = Account.objects.get()
       return response.then((employee) => {
         expect(employee.id).toBe(99)
         expect(employee.name).toBe('Olivia')
         expect(employee.constructor.name).toBe('Account')
-        getCall.restore()
       }).catch((error) => {
         throw error
       })
@@ -100,12 +95,11 @@ describe('Manager', () => {
     })
 
     it('returns a class instance', () => {
-      const data = { id: 99, name: 'Olivia', email: 'olivia@me' }
+      const data = [{ id: 99, name: 'Olivia', email: 'olivia@me' }]
+      fetchMock.restore()
+      fetchMock.mock('/api/employee/', data)
       const mgr = Employee.objects
-      const getCall = expect.spyOn(mgr.http, 'get').andReturn(new Promise((resolve) => {
-        resolve([data])
-      }))
-      const response = mgr.all({ id: 99 })
+      const response = mgr.all()
       return response.then((items) => {
         expect(items.length).toBe(1)
         const item = items[0]
@@ -113,7 +107,6 @@ describe('Manager', () => {
         expect(item.name).toBe('Olivia')
         expect(item.hasEmail).toBe(true)
         expect(item.constructor.name).toBe('Employee')
-        getCall.restore()
       }).catch((error) => {
         throw error
       })

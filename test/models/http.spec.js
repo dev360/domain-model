@@ -50,8 +50,9 @@ describe('Http', () => {
       fetchMock.mock(url, { test: 'hello' })
       const http = new Http()
       request = http.httpRequest(url)
-      return request.then((data) => {
+      return request.then(({ data, response }) => {
         expect(data.test).toBe('hello')
+        expect(response.status).toBe(200)
       }).catch((ex) => {
         throw ex
       })
@@ -61,8 +62,9 @@ describe('Http', () => {
       fetchMock.mock(url, { status: 201, body: { test: 'hello' } })
       const http = new Http()
       request = http.httpRequest(url)
-      return request.then((data) => {
+      return request.then(({ data, response }) => {
         expect(data.test).toBe('hello')
+        expect(response.status).toBe(201)
       }).catch((ex) => {
         throw ex
       })
@@ -73,10 +75,13 @@ describe('Http', () => {
       fetchMock.mock(url, "{ test: 'hello")
       const http = new Http()
       request = http.httpRequest(url)
-      return request.then(() => {
-        throw new Error('Promise should not resolve')
+      return request.then(({ response }) => {
+        const consoleMock = expect.spyOn(console, 'warn')
+        expect(response.status).toBe(200)
+        expect(consoleMock).toHaveBeenCalledWith('JSON deserialization failed')
+        consoleMock.restore()
       }).catch((error) => {
-        expect(error.type).toBe('JSON serialization failed')
+        throw error
       })
     })
 
@@ -88,9 +93,9 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then(() => {
         throw new Error('Promise should not resolve')
-      }).catch((error) => {
-        expect(error.type).toBe('Moved Permanently')
-        expect(error.response.status).toBe(301)
+      }).catch(({ type, response }) => {
+        expect(type).toBe('Moved Permanently')
+        expect(response.status).toBe(301)
       })
     })
 
@@ -101,9 +106,9 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then(() => {
         throw new Error('Promise should not resolve')
-      }).catch((error) => {
-        expect(error.type).toBe('Found')
-        expect(error.response.status).toBe(302)
+      }).catch(({ type, response }) => {
+        expect(type).toBe('Found')
+        expect(response.status).toBe(302)
       })
     })
 
@@ -114,9 +119,9 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then(() => {
         throw new Error('Promise should not resolve')
-      }).catch((error) => {
-        expect(error.type).toBe('Bad Request')
-        expect(error.response.status).toBe(400)
+      }).catch(({ type, response }) => {
+        expect(type).toBe('Bad Request')
+        expect(response.status).toBe(400)
       })
     })
 
@@ -127,9 +132,9 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then(() => {
         throw new Error('Promise should not resolve')
-      }).catch((error) => {
-        expect(error.type).toBe('Unauthorized')
-        expect(error.response.status).toBe(401)
+      }).catch(({ type, response }) => {
+        expect(type).toBe('Unauthorized')
+        expect(response.status).toBe(401)
       })
     })
 
@@ -140,9 +145,9 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then(() => {
         throw new Error('Promise should not resolve')
-      }).catch((error) => {
-        expect(error.type).toBe('Forbidden')
-        expect(error.response.status).toBe(403)
+      }).catch(({ type, response }) => {
+        expect(type).toBe('Forbidden')
+        expect(response.status).toBe(403)
       })
     })
 
@@ -153,9 +158,9 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then(() => {
         throw new Error('Promise should not resolve')
-      }).catch((error) => {
-        expect(error.type).toBe('Not Found')
-        expect(error.response.status).toBe(404)
+      }).catch(({ type, response }) => {
+        expect(type).toBe('Not Found')
+        expect(response.status).toBe(404)
       })
     })
 
@@ -166,9 +171,9 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then(() => {
         throw new Error('Promise should not resolve')
-      }).catch((error) => {
-        expect(error.type).toBe('Internal Server Error')
-        expect(error.response.status).toBe(500)
+      }).catch(({ type, response }) => {
+        expect(type).toBe('Internal Server Error')
+        expect(response.status).toBe(500)
       })
     })
   })
