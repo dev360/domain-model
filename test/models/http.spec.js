@@ -75,8 +75,8 @@ describe('Http', () => {
       fetchMock.mock(url, "{ test: 'hello")
       const http = new Http()
       request = http.httpRequest(url)
+      const consoleMock = expect.spyOn(console, 'warn')
       return request.then(({ response }) => {
-        const consoleMock = expect.spyOn(console, 'warn')
         expect(response.status).toBe(200)
         expect(consoleMock).toHaveBeenCalledWith('JSON deserialization failed')
         consoleMock.restore()
