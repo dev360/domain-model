@@ -52,8 +52,8 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then((data) => {
         expect(data.test).toBe('hello')
-      }).catch(() => {
-        throw new Error('Promise should not resolve')
+      }).catch((ex) => {
+        throw ex
       })
     })
     it('resolves 201', () => {
@@ -63,8 +63,8 @@ describe('Http', () => {
       request = http.httpRequest(url)
       return request.then((data) => {
         expect(data.test).toBe('hello')
-      }).catch(() => {
-        throw new Error('Promise should not resolve')
+      }).catch((ex) => {
+        throw ex
       })
     })
 
@@ -184,6 +184,8 @@ describe('Http', () => {
       return request.then(() => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.method).toBe(undefined)
+      }).catch((error) => {
+        throw error
       })
     })
   })
@@ -199,6 +201,8 @@ describe('Http', () => {
       return request.then(() => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.method).toBe('POST')
+      }).catch((error) => {
+        throw error
       })
     })
 
@@ -214,6 +218,8 @@ describe('Http', () => {
       return request.then(() => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.body).toBe(JSON.stringify(payload))
+      }).catch((error) => {
+        throw error
       })
     })
 
@@ -228,8 +234,8 @@ describe('Http', () => {
       return request.then((data) => {
         expect(data).toBe(payload)
         expect(httpRequest).toHaveBeenCalledWith(url, 'POST', payload)
-      }).catch(() => {
-        throw new Error('Should not error out')
+      }).catch((error) => {
+        throw error
       })
     })
   })
@@ -245,6 +251,8 @@ describe('Http', () => {
       return request.then(() => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.method).toBe('PUT')
+      }).catch((error) => {
+        throw error
       })
     })
 
@@ -260,6 +268,8 @@ describe('Http', () => {
       return request.then(() => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.body).toBe(JSON.stringify(payload))
+      }).catch((error) => {
+        throw error
       })
     })
 
@@ -274,8 +284,8 @@ describe('Http', () => {
       return request.then((data) => {
         expect(data).toBe(payload)
         expect(httpRequest).toHaveBeenCalledWith(url, 'PUT', payload)
-      }).catch(() => {
-        throw new Error('Should not error out')
+      }).catch((error) => {
+        throw error
       })
     })
   })
@@ -291,6 +301,8 @@ describe('Http', () => {
       return request.then(() => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.method).toBe('DELETE')
+      }).catch((error) => {
+        throw error
       })
     })
 
@@ -309,6 +321,8 @@ describe('Http', () => {
       return request.then(() => {
         const opts = fetchMock.lastOptions(url)
         expect(opts.body).toBe(JSON.stringify(payload))
+      }).catch((error) => {
+        throw error
       })
     })
 
@@ -323,8 +337,8 @@ describe('Http', () => {
       return request.then((data) => {
         expect(data).toBe(payload)
         expect(httpRequest).toHaveBeenCalledWith(url, 'DELETE', payload)
-      }).catch(() => {
-        throw new Error('Should not error out')
+      }).catch((error) => {
+        throw error
       })
     })
   })
